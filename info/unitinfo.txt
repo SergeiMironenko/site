@@ -1,0 +1,13 @@
+[Unit]
+Description=Concordancer gunicorn instance
+After=network.target
+
+[Service]
+User=root
+Group=nginx
+WorkingDirectory=/root/flask
+Environment="PATH=/root/flask/venv/bin"
+ExecStart=/root/flask/venv/bin/gunicorn --workers 3 --bind unix:gunicorn.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
