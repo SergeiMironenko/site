@@ -35,19 +35,21 @@ function Welcome() {
 }
 
 function RenderTableRow(props) {
+  const dirs = ["Легкая атлетика", "Баскетбол"];
+  const teachers = ["Пересадина Екатерина Евгеньевна", "Другой преподаватель"];
   return (
     <TableRow>
       <RenderTableCell value={props.value['name']} />
       <RenderTableCell hide={props.hide} value={props.value['gender']} />
-      <RenderTableCell edit hide={props.hide} value={props.value['dir']} />
-      <RenderTableCell edit hide={props.hide} value={props.value['teacher']} />
-      <RenderTableCell edit value={props.value['jump']} />
-      <RenderTableCell edit value={props.value['up']} />
-      <RenderTableCell edit value={props.value['pushup']} />
-      <RenderTableCell edit value={props.value['flex']} />
-      <RenderTableCell edit value={props.value['run']} />
-      <RenderTableCell edit value={props.value['height']} />
-      <RenderTableCell edit value={props.value['weight']} />
+      <RenderTableCell edit="select" hide={props.hide} selectList={dirs} value={props.value['dir']} />
+      <RenderTableCell edit="select" hide={props.hide} selectList={teachers} value={props.value['teacher']} />
+      <RenderTableCell edit="number" value={props.value['jump']} />
+      <RenderTableCell edit="number" value={props.value['up']} />
+      <RenderTableCell edit="number" value={props.value['pushup']} />
+      <RenderTableCell edit="number" value={props.value['flex']} />
+      <RenderTableCell edit="number" value={props.value['run']} />
+      <RenderTableCell edit="number" value={props.value['height']} />
+      <RenderTableCell edit="number" value={props.value['weight']} />
       <RenderTableCell value={props.value['I']} />
     </TableRow>);
 }
@@ -55,12 +57,20 @@ function RenderTableRow(props) {
 function RenderTableCell(props) {
   if (props.hide) return null;
   var elem = "";
-  if (props.edit)
+  if (props.edit === "number")
     elem = <TextField
       defaultValue={props.value}
       variant="standard"
       multiline
     />;
+  else if (props.edit === "select")
+    elem = <Autocomplete
+      disablePortal
+      options={props.selectList}
+      style={{ width: 200 }}
+      renderInput={(params) => <TextField {...params} />}
+      size="small"
+    />
   else
     elem = props.value;
   return <TableCell
@@ -226,15 +236,15 @@ class Screen1 extends React.Component {
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
-                <RenderTableCell style={{ minWidth: 150 }} hide={false} className="tableCellRows" rowSpan={2} value="Студент" />
-                <RenderTableCell style={{ minWidth: 150 }} hide={this.state.isOnlyNormatives} className="tableCellRows" rowSpan={2} value="Пол" />
-                <RenderTableCell style={{ minWidth: 150 }} hide={this.state.isOnlyNormatives} className="tableCellRows" rowSpan={2} value="Отделение" />
-                <RenderTableCell style={{ minWidth: 150 }} hide={this.state.isOnlyNormatives} className="tableCellRows" rowSpan={2} value="Преподаватель" />
+                <RenderTableCell hide={false} className="verticalAlignTop" rowSpan={2} value="Студент" />
+                <RenderTableCell hide={this.state.isOnlyNormatives} className="verticalAlignTop" rowSpan={2} value="Пол" />
+                <RenderTableCell style={{ minWidth: 150 }} hide={this.state.isOnlyNormatives} className="verticalAlignTop" rowSpan={2} value="Отделение" />
+                <RenderTableCell style={{ minWidth: 150 }} hide={this.state.isOnlyNormatives} className="verticalAlignTop" rowSpan={2} value="Преподаватель" />
                 <RenderTableCell style={{ minWidth: 150 }} hide={false} colSpan={5} value="Нормативы" />
                 <RenderTableCell style={{ minWidth: 150 }} hide={false} colSpan={3} value="Измерения" />
               </TableRow>
               <TableRow>
-                <RenderTableCell style={{ top: 37, minWidth: 150 }} value="Прыжок в длину" />
+                <RenderTableCell style={{ top: 37 }} value="Прыжок в длину" />
                 <RenderTableCell style={{ top: 37, minWidth: 150 }} value="Подъем туловища" />
                 <RenderTableCell style={{ top: 37, minWidth: 150 }} value="Подтягивание" />
                 <RenderTableCell style={{ top: 37, minWidth: 150 }} value="Гибкость" />
